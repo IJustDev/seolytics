@@ -4,7 +4,7 @@
 Seolytics is an library with inclulded CLI that verifys the SEO integrity of a certain text.
 Basically it allows you to input an text like this:
 ```
-Der Tag ist wunderschön und ich habe eine knackige rechte Arschbacke.
+Das ist ein einfacher Test.
 ```
 
 with the help of this
@@ -17,8 +17,8 @@ const actions = [
 
 const params = {
     content,
-    keyword: 'Arschbacke',
-    lsiKeywords: ['wunderschön']
+    keyword: 'Test',
+    lsiKeywords: ['einfacher']
 }
 
 const kwchecker = new ContentChecker(params, actions);
