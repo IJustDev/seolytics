@@ -17,8 +17,8 @@ const actions = [
 
 const params = {
     content,
-    keyword: 'launchpad',
-    lsiKeywords: ['instrument']
+    keyword: 'Arschbacke',
+    lsiKeywords: ['wunderschön']
 }
 
 const kwchecker = new ContentChecker(params, actions);
