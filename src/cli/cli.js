@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const {
     ContentChecker,
@@ -38,7 +40,7 @@ require('yargs')
         description: 'Defines a config file that is used throughout the content check.',
     })
     .option('keyword', {
-        alias: 'k'
+        alias: 'k',
         type: 'string',
         description: 'The keyword the content checker should look out for.'
     })
