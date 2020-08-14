@@ -1,7 +1,7 @@
 const Hypher = require('hypher');
 const german = require('hyphenation.de');
 
-module.exports.ContentChecker = class KeywordChecker {
+exports.ContentChecker = class KeywordChecker {
 
     /**
      * @param {object} params
@@ -23,7 +23,7 @@ module.exports.ContentChecker = class KeywordChecker {
     }
 }
 
-module.exports.KeywordDensityChecker = class KeywordDensityChecker {
+exports.KeywordDensityChecker = class KeywordDensityChecker {
 
     name() {
         return "Keyword Density";
@@ -39,7 +39,7 @@ module.exports.KeywordDensityChecker = class KeywordDensityChecker {
     }
 }
 
-module.exports.CheckLSIKeywords = class CheckLSIKeywords {
+exports.CheckLSIKeywords = class CheckLSIKeywords {
 
     name() {
         return "Check LSI Keywords";
@@ -69,7 +69,7 @@ module.exports.CheckLSIKeywords = class CheckLSIKeywords {
     }
 }
 
-module.exports.MetaDescriptionChecker = class MetaDescriptionChecker {
+exports.MetaDescriptionChecker = class MetaDescriptionChecker {
 
     name() {
         return "Meta description rating";
@@ -87,7 +87,7 @@ module.exports.MetaDescriptionChecker = class MetaDescriptionChecker {
     }
 }
 
-module.exports.FleschReadingEase = class FleschReadingEase {
+exports.FleschReadingEase = class FleschReadingEase {
     name() {
         return "Flesch reading ease";
     }
@@ -138,4 +138,4 @@ class Utils {
         return keywordsFound;
     }
 }
-module.exports.Utils = Utils;
+exports.Utils = Utils;
