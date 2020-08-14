@@ -1,0 +1,19 @@
+{
+  "name": "seolytics",
+  "version": "0.1.0",
+  "description": "SEO Tools for content optimization",
+  "main": "src/cli/index.js",
+  "dependencies": {
+    "duden-search-api": "^1.0.7",
+    "hyphenation.de": "^0.2.1",
+    "hypher": "^0.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/cli/index.js"
+  },
+  "keywords": [],
+  "author": "IJustDev",
+  "license": "ISC"
+}
