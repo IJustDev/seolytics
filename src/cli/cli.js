@@ -22,7 +22,7 @@ require('yargs')
         }
         const content = fs.readFileSync(filename, {encoding: 'utf8'});
         const actions = [
-            new KeywordDensitiyChecker(),
+            new KeywordDensityChecker(),
             new CheckLSIKeywords(),
             new FleschReadingEase(),
         ];

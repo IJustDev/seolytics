@@ -1,6 +1,6 @@
 {
   "name": "seolytics",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "SEO Tool for content optimization",
   "main": "src/lib/content-checker.js",
   "dependencies": {
