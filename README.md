@@ -64,9 +64,7 @@ Into this
 
 ## Usage
 ```sh
-$ npm i
-# CLI functionality currently not implemented. Edit index.js!
-$ node src/cli/index.js
+$ npm i -g seolytics
 ```
 
 [fre]: https://de.ryte.com/wiki/Flesch-Reading-Ease

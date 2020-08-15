@@ -6,6 +6,7 @@
   "dependencies": {
     "hyphenation.de": "^0.2.1",
     "hypher": "^0.2.5",
+    "js-yaml": "^3.14.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {},

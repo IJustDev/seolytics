@@ -1,0 +1,3 @@
+keyword: "SEO"
+actions:
+    - checker.keyword.amount

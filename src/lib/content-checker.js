@@ -7,8 +7,7 @@ exports.ContentChecker = class KeywordChecker {
      * @param {object} params
      */
     constructor(params, actions) {
-        const results = [];
-        for (const action of actions) {
+        const results = []; for (const action of actions) {
             const result = action.perform(params);
             results.push({
                 name: action.name(),
@@ -23,7 +22,11 @@ exports.ContentChecker = class KeywordChecker {
     }
 }
 
-exports.KeywordDensityChecker = class KeywordDensityChecker {
+class KeywordDensityChecker {
+
+    id() {
+        return "checker.keyword.density";
+    }
 
     name() {
         return "Keyword Density";
@@ -38,8 +41,30 @@ exports.KeywordDensityChecker = class KeywordDensityChecker {
         return [0, density, "Perfect!"];
     }
 }
+exports.KeywordDensityChecker = KeywordDensityChecker;
 
-exports.CheckLSIKeywords = class CheckLSIKeywords {
+class KeywordAmountChecker {
+    id() {
+        return "checker.keyword.amount";
+    }
+
+    name() {
+        return "Keyword Amount";
+    }
+
+    perform(params) {
+        const {content, keyword} = params;
+        const occours = Utils.countOccours(content, keyword);
+        return [0, occours];
+    }
+}
+exports.KeywordAmountChecker = KeywordAmountChecker;
+
+class CheckLSIKeywords {
+
+    id() {
+        return "checker.lsi.amount";
+    }
 
     name() {
         return "Check LSI Keywords";
@@ -68,8 +93,13 @@ exports.CheckLSIKeywords = class CheckLSIKeywords {
         return [0, null, "All keywords included"];
     }
 }
+exports.CheckLSIKeywords = CheckLSIKeywords;
 
-exports.MetaDescriptionChecker = class MetaDescriptionChecker {
+class MetaDescriptionChecker {
+
+    id() {
+        return "checker.meta.validity";
+    }
 
     name() {
         return "Meta description rating";
@@ -86,8 +116,14 @@ exports.MetaDescriptionChecker = class MetaDescriptionChecker {
         return [0, content.length, "Meta description is perfect."];
     }
 }
+exports.MetaDescriptionChecker = MetaDescriptionChecker;
 
-exports.FleschReadingEase = class FleschReadingEase {
+class FleschReadingEase {
+
+    id() {
+        return "checker.flesch.score";
+    }
+
     name() {
         return "Flesch reading ease";
     }
@@ -124,6 +160,7 @@ exports.FleschReadingEase = class FleschReadingEase {
         return splitted.length;
     }
 }
+exports.FleschReadingEase = FleschReadingEase;
 
 class Utils {
     static calculateKeywordDensity(content, keyword) {
@@ -136,6 +173,23 @@ class Utils {
         const regex = new RegExp(keyword , "gi");
         const keywordsFound = (content.match(regex) || []).length;
         return keywordsFound;
+    }
+    static getActionsFromIds(idArray) {
+        const availableActions = [
+            new KeywordDensityChecker(),
+            new KeywordAmountChecker(),
+            new CheckLSIKeywords(),
+            new MetaDescriptionChecker(),
+            new FleschReadingEase(),
+        ];
+        const actionsToUse = [];
+        for (const id of idArray) {
+            for (const action of availableActions) {
+                if (action.id() === id)
+                    actionsToUse.push(action);
+            }
+        }
+        return actionsToUse;
     }
 }
 exports.Utils = Utils;
