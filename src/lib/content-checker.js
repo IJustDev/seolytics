@@ -172,7 +172,7 @@ class WordCounter {
     }
 
     perform(params) {
-        return params.content.split(" ").length;
+        return [0, params.content.split(" ").length];
     }
 }
 exports.WordCounter = WordCounter;
@@ -187,7 +187,7 @@ class SentenceCounter {
     }
 
     perform(params) {
-        return params.content.split(" ").length;
+        return [0, params.content.split(".").length];
     }
 }
 exports.SentenceCounter = SentenceCounter;
@@ -202,7 +202,7 @@ class CharCounter {
     }
 
     perform(params) {
-        return params.content.length;
+        return [0, params.content.length];
     }
 }
 exports.CharCounter = CharCounter;
