@@ -28,7 +28,7 @@ actions:
 
 and this command:
 ```sh
-$ seolytics check example/test.txt -c example/seolytics.yml
+$ seolytics check example/test.txt -js -c example/seolytics.yml
 ```
 
 And get an analysis like this:
@@ -85,6 +85,8 @@ Options:
   --version      Show version number                                   [boolean]
   --config, -c   Defines a config file that is used throughout the content
                  check.                                                 [string]
+  --json
+
   --keyword, -k  The keyword the content checker should look out for.   [string]
 ```
 

@@ -57,7 +57,15 @@ require('yargs')
         let params = configParameters[0];
         params.content = content;
 
-        console.log(JSON.stringify(new ContentChecker(params, configParameters[1])));
+        const result = new ContentChecker(params, configParameters[1]);
+        if (argv.json) {
+            console.log(JSON.stringify(result));
+        } else {
+            result.map((c) => {
+                console.log(c.name + ": " c.value + "\n" + c.message + "\n\n");
+            });
+        }
+
     })
     .option('config', {
         alias: 'c',
@@ -68,5 +76,10 @@ require('yargs')
         alias: 'k',
         type: 'string',
         description: 'The keyword the content checker should look out for.'
+    })
+    .option('json', {
+        alias: 'js',
+        type: 'boolean',
+        description: 'Display as json.'
     })
     .argv
