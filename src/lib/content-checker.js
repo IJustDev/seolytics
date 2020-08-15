@@ -162,6 +162,51 @@ class FleschReadingEase {
 }
 exports.FleschReadingEase = FleschReadingEase;
 
+class WordCounter {
+    id() {
+        return "counter.words";
+    }
+
+    name() {
+        return "Words";
+    }
+
+    perform(params) {
+        return params.content.split(" ").length;
+    }
+}
+exports.WordCounter = WordCounter;
+
+class SentenceCounter {
+    id() {
+        return "counter.sentences";
+    }
+
+    name() {
+        return "Sentences";
+    }
+
+    perform(params) {
+        return params.content.split(" ").length;
+    }
+}
+exports.SentenceCounter = SentenceCounter;
+
+class CharCounter {
+    id() {
+        return "counter.chars";
+    }
+
+    name() {
+        return "Chars (Textlength)";
+    }
+
+    perform(params) {
+        return params.content.length;
+    }
+}
+exports.CharCounter = CharCounter;
+
 class Utils {
     static calculateKeywordDensity(content, keyword) {
         const words = content.split(" ");
@@ -181,6 +226,9 @@ class Utils {
             new CheckLSIKeywords(),
             new MetaDescriptionChecker(),
             new FleschReadingEase(),
+            new WordCounter(),
+            new SentenceCounter(),
+            new CharCounter(),
         ];
         const actionsToUse = [];
         for (const id of idArray) {
