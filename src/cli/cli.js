@@ -58,12 +58,12 @@ require('yargs')
         params.content = content;
 
         const result = new ContentChecker(params, configParameters[1]);
-        if (argv.json) {
-            console.log(JSON.stringify(result));
-        } else {
+        if (argv.json === undefined) {
             result.map((c) => {
-                console.log(c.name + ": " c.value + "\n" + c.message + "\n\n");
+                console.log(c.name + ": " + c.result.value + "\n" + c.result.message + "\n-------");
             });
+        } else {
+            console.log(JSON.stringify(result));
         }
 
     })
