@@ -1,18 +1,34 @@
-# Seolytics
+<div align="center">
+<h1>Seolytics</h1>
+<h3>Library for SEO analysis</h3>
+</div>
+
+<div align="center">
+
+![npm](https://img.shields.io/npm/dw/seolytics?style=for-the-badge)
+
+</div>
 
 ## What?
-Seolytics is an library with inclulded CLI that verifys the SEO integrity of a certain text.
+Seolytics is an library with included CLI that analysis content from a SEO point of view.
 
 Basically it allows you to analyse a text like this:
 ```
+# example/test.txt
 Das ist ein einfacher Test.
 ```
 
 with the help of this [config][config]:
-```
+```yaml
+# example/seolytics.yml
 keyword: "SEO"
 actions:
     - checker.keyword.amount
+```
+
+and this command:
+```sh
+$ seolytics check example/test.txt -c example/seolytics.yml
 ```
 
 And get an analysis like this:
@@ -50,6 +66,9 @@ And get an analysis like this:
 $ npm i -g seolytics
 ```
 
+## Support
+<a href="https://www.buymeacoffee.com/IJustDev" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
 ## CLI Usage
 ```sh
 $ seolytics --help
@@ -70,7 +89,7 @@ Options:
 ```
 
 ```sh
-$ seolytics check test.txt -c seolytics.yml
+$ seolytics check example/test.txt -c example/seolytics.yml
 ```
 
 ### Actions
