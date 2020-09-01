@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const yArgs = require('yargs');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const {
@@ -7,79 +8,114 @@ const {
     Utils,
 } = require('../lib/content-checker');
 
-function getConfig(filename) {
-    return yaml.safeLoad(fs.readFileSync(filename))
-}
+const Formatter = require('../lib/formatter');
 
-function getActionsDefault() {
-    return [
-        'checker.flesch.score',
-        'checker.keyword.density',
-        'checker.lsi.amount',
-    ];
-}
+class CLI {
 
-function getConfigParameters(argv) {
-    let actionIds = [];
-    let keyword = "";
-    let lsiKeywords = [];
-    if (argv.config !== undefined) {
-        const data = getConfig(argv.config);
-        actionIds = data.actions ? data.actions : getActionsDefault();
-        keyword = data.keyword ? data.keyword : 'NONE';
-        lsiKeywords = data.lsiKeywords ? data.lsiKeywords : [];
-    } else {
-        actionIds = getActionsDefault();
-        keyword = argv.keyword ? argv.keyword : 'NONE';
+    getConfig(filename) {
+        return yaml.safeLoad(fs.readFileSync(filename))
     }
-    return [
-        {
-            keyword: argv.keyword ? argv.keyword : keyword,
-            lsiKeywords,
-        },
-        Utils.getActionsFromIds(actionIds)
-    ];
-}
 
-require('yargs')
-    .command('check [filename]', 'Verifies SEO integrity of the files\' content.', (yargs) => {
-        yargs.positional('filename', {
-            describe: 'Name of the file that you want to be checked',
-        });
-    }, (argv) => {
-        const filename = argv.filename;
+    getActionsDefault() {
+        return [
+            'checker.flesch.score',
+            'checker.keyword.density',
+            'checker.lsi.amount',
+        ];
+    }
+
+    getConfigParameters(argv) {
+        let actionIds = [];
+        let keyword = "";
+        let lsiKeywords = [];
+        if (argv.config !== undefined) {
+            const data = this.getConfig(argv.config);
+            actionIds = data.actions ? data.actions : this.getActionsDefault();
+            keyword = data.keyword ? data.keyword : 'NONE';
+            lsiKeywords = data.lsiKeywords ? data.lsiKeywords : [];
+        } else {
+            actionIds = this.getActionsDefault();
+            keyword = argv.keyword ? argv.keyword : 'NONE';
+        }
+        return [
+            {
+                keyword: argv.keyword ? argv.keyword : keyword,
+                lsiKeywords,
+            },
+            Utils.getActionsFromIds(actionIds)
+        ];
+    }
+
+    readSingleFile(filename) {
         if (filename === undefined)
             return console.error('[!] Please enter a filename');
 
         const content = fs.readFileSync(filename, {encoding: 'utf8'});
 
-        const configParameters = getConfigParameters(argv);
-        let params = configParameters[0];
-        params.content = content;
+        return content
+    }
 
-        const result = new ContentChecker(params, configParameters[1]);
-        if (argv.json === undefined) {
-            result.map((c) => {
-                console.log(c.name + ": " + c.result.value + "\n" + c.result.message + "\n-------");
-            });
+    printResult(result, argv) {
+        const formatter = new Formatter(result);
+        if (argv.json !== undefined) {
+            console.log(formatter.formatAsJSON())
+        } else if (argv.junit !== undefined) {
+            console.log(formatter.formatAsJUnitXML())
         } else {
-            console.log(JSON.stringify(result));
+            console.log(formatter.formatAsConsoleOutput())
         }
+    }
 
-    })
-    .option('config', {
-        alias: 'c',
-        type: 'string',
-        description: 'Defines a config file that is used throughout the content check.',
-    })
-    .option('keyword', {
-        alias: 'k',
-        type: 'string',
-        description: 'The keyword the content checker should look out for.'
-    })
-    .option('json', {
-        alias: 'js',
-        type: 'boolean',
-        description: 'Display as json.'
-    })
-    .argv
+    runCLI() {
+        yArgs.option('config', {
+            alias: 'c',
+            type: 'string',
+            description: 'Defines a config file that is used throughout the content check.',
+        });
+        yArgs.option('keyword', {
+            alias: 'k',
+            type: 'string',
+            description: 'The keyword the content checker should look out for.'
+        });
+        yArgs.option('json', {
+            alias: 'js',
+            type: 'boolean',
+            description: 'Display as json.'
+        });
+        yArgs.option('junit', {
+            type: 'boolean',
+            description: 'Outputs data in JUnit XML format for eg. Gitlab pipelines.',
+        });
+        yArgs
+            .command('check', 'Verifies SEO integrity of the files\' content.',
+                (yargs) => {
+                    yArgs.option('filename', {
+                        alias: 'f',
+                        nargs: 1,
+                    });
+
+                }, (argv) => {
+                    if (argv.filename === undefined) {
+                        return console.log("Please enter at least one filename by using -f <filename>")
+                    }
+                    const configParameters = this.getConfigParameters(argv);
+                    const params = configParameters[0];
+                    let result = [];
+                    if (Array.isArray(argv.filename)) {
+                        for (const filename of argv.filename) {
+                            params.content = this.readSingleFile(filename);
+                            result.push(new ContentChecker(params, configParameters[1], filename));
+                        }
+                    } else {
+                        params.content = this.readSingleFile(argv.filename);
+                        result = new ContentChecker(params, configParameters[1], argv.filename);
+                    }
+                    this.printResult(result, argv);
+                });
+
+        yArgs.argv
+
+    }
+}
+
+new CLI().runCLI()

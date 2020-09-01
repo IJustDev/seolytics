@@ -6,8 +6,9 @@ exports.ContentChecker = class KeywordChecker {
     /**
      * @param {object} params
      */
-    constructor(params, actions) {
-        const results = []; for (const action of actions) {
+    constructor(params, actions, filename) {
+        const results = [];
+        for (const action of actions) {
             const result = action.perform(params);
             results.push({
                 name: action.name(),
@@ -15,7 +16,8 @@ exports.ContentChecker = class KeywordChecker {
                     errorCode: result[0],
                     value: result[1],
                     message: result[2],
-                }
+                },
+                filename,
             });
         }
         return results;
